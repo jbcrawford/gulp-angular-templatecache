@@ -2,11 +2,11 @@ var mapStream = require('map-stream');
 var streamCombiner = require('stream-combiner');
 var path = require('path');
 var through2 = require('through2');
-var lodashTemplate = require('lodash.template');
 var concat = require('gulp-concat');
 var header = require('gulp-header');
 var footer = require('gulp-footer');
 var jsesc = require('jsesc');
+var lodashTemplate = require('lodash/template');
 
 /**
  * "constants"
@@ -186,13 +186,13 @@ function templateCache(filename, options) {
   return streamCombiner(
     templateCacheStream(options.root || '', options.base, options.templateBody, options.transformUrl, options.escapeOptions || {}),
     concat(filename),
-    header(templateHeader, {
+    header(lodashTemplate(templateHeader)({
       module: options.module || DEFAULT_MODULE,
       standalone: options.standalone ? ', []' : ''
-    }),
-    footer(templateFooter, {
+    })),
+    footer(lodashTemplate(templateFooter)({
       module: options.module || DEFAULT_MODULE
-    }),
+    })),
     wrapInModule(options.moduleSystem)
   );
 
